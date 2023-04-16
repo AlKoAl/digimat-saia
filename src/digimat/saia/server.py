@@ -744,11 +744,28 @@ class SAIAServers(object):
 
     def assignServerLid(self, server, lid):
         s=self.getFromLid(lid)
+        print(s)
+        if s and s!=server:
+            if server.host != s.host:
+                try:
+                    if lid >= 0 and lid < 255:
+                        self._indexByLid[lid] = server
+                        server._lid = lid
+                        self.logger.info('Assign server %s with lid %d' % (server.host, lid))
+                        return True
+                except:
+                    pass
+            else:
+                self.logger.error('duplicate server lid %d (%s<-->%s)!' % (lid, s.host, server.host))
+                server.pause(15.0)
+                return
+        """
+        s=self.getFromLid(lid)
         if s and s!=server:
             self.logger.error('duplicate server lid %d (%s<-->%s)!' % (lid, s.host, server.host))
             server.pause(15.0)
             return
-
+        """
         try:
             del self._indexByLid[server.lid]
         except:
