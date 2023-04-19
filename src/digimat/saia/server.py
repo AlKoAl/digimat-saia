@@ -744,7 +744,6 @@ class SAIAServers(object):
 
     def assignServerLid(self, server, lid):
         s=self.getFromLid(lid)
-        print(s)
         if s and s!=server:
             if server.host != s.host:
                 try:
